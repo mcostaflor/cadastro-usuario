@@ -1,0 +1,12 @@
+.user-create {
+    &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            margin-bottom: 0px !important;
+        }
+    }
+}
