@@ -5,14 +5,32 @@
     flex-direction: column;
 
     &__breadcrumbs {
-        padding: 24px 50px;
+        padding: 24px 24px;
+        @media (min-width: 768px)
+        {
+            padding: 24px 48px;
+        }
     }
 
     &__content {
-        padding: 24px 48px;
-        margin: 0px 48px;
         background-color: #FFF;
+        flex: 1;
 
-        flex:1;
+        padding: 24px 24px;
+        margin: 0px 0px;
+
+        @media (min-width: 768px)
+        {
+            padding: 24px 48px;
+            margin: 0px 48px;
+        }
+    }
+
+    &__footer {
+        padding: 12px 24px !important;
+        @media (min-width: 768px) 
+        {
+            padding: 24px 48px !important;
+        }
     }
 }
