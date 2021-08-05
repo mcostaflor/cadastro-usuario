@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
+
+import 'react-toastify/dist/ReactToastify.css';
 import "antd/dist/antd.css";
 
 // import '@testing-library/jest-dom';
