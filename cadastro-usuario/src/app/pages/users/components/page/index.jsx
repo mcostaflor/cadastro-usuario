@@ -72,10 +72,10 @@ export const UserPage = ({ match }) => {
                     </Space>
                     <Space size={2} direction="vertical">
                         <Text strong>
-                            Birthdate
+                            Birthday
                         </Text>
                         <Text>
-                            {userData.birthDate}
+                            {new Date(userData.birthday).toLocaleDateString()}
                         </Text>
                     </Space>
                 </Space>
