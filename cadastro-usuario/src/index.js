@@ -5,8 +5,6 @@ import App from './app';
 import 'react-toastify/dist/ReactToastify.css';
 import "antd/dist/antd.css";
 
-// import '@testing-library/jest-dom';
-
 import './index.css';
 
 ReactDOM.render(
