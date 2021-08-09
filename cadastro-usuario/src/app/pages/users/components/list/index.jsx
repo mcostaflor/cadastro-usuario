@@ -33,10 +33,10 @@ const columns = [
         title: 'Birthday',
         dataIndex: 'birthday',
         key: 'birthday',
-        render: userData => new Date(userData.birthday).toLocaleDateString(),
+        render: birthday => new Date(birthday).toLocaleDateString(),
     },
     {
-        render: userData => <Link to={user.page.replace(":id", userData.code)}>View</Link>,
+        render: userData => <Link to={user.page.replace(":code", userData.code)}>View</Link>,
     },
 ];
 
@@ -70,7 +70,7 @@ export const Users = () => {
     }, [currentPage]);
 
     const handleUserClicked = (code) => {
-        history.push(user.page.replace(":id", code));
+        history.push(user.page.replace(":code", code));
     };
 
     return (
