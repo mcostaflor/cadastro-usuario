@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Button, Space, Divider, Modal, Upload, Form, Input, DatePicker, message, Spin } from 'antd';
 import { ArrowLeftOutlined, CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link, useHistory, useParams } from 'react-router-dom';
+import moment from 'moment';
 
 import { user } from '../../../../routes';
 
 import './index.scss';
 import { userApi } from '../../../../api';
+import { getBase64 } from '../../../../helpers/getBase64';
 
 const { Title } = Typography;
 
@@ -44,15 +46,17 @@ export const UserEdit = () => {
             const payload = {
                 code: values.code,
                 name: values.name,
-                birthDate: values.birthDate,
-                photo: values.photo?.file || null,
+                birthday: values.birthday,
+                photo: await getBase64(values.photo?.file) || null,
             };
+
+            console.log(payload);
 
             try {
                 setIsSubmitting(true);
-                const { userId } = await userApi.update(id, payload);
+                const { code } = await userApi.update(id, payload);
                 message.success("User saved with success!");
-                history.push(user.page.replace(":id", userId));
+                history.push(user.page.replace(":id", code));
             } catch (e) {
                 message.error("Error saving user, please try again.");
             } finally {
@@ -102,13 +106,12 @@ export const UserEdit = () => {
                             disabled={isLoadingUser || isSubmitting}
                         />
                         <Button
-                            form="new-user-form"
+                            form="edit-user-form"
                             htmlType="submit"
                             type="primary"
                             shape="circle"
                             size="large"
                             icon={<CheckOutlined />}
-                            onClick={handleSubmitButtonClicked}
                             loading={isLoadingUser || isSubmitting}
                             disabled={isLoadingUser || isSubmitting}
                         />
@@ -120,7 +123,7 @@ export const UserEdit = () => {
                 <Spin size="large" />
                 :
                 <Form
-                    id="new-user-form"
+                    id="edit-user-form"
                     name="basic"
                     layout="vertical"
                     wrapperCol={{ span: 14 }}
@@ -128,7 +131,7 @@ export const UserEdit = () => {
                     initialValues={{
                         code: userData?.code,
                         name: userData?.name,
-                        birthDate: userData?.birthDate,
+                        birthday: moment(userData?.birthday),
                         photo: userData?.photo,
                     }}
                 >
@@ -147,8 +150,8 @@ export const UserEdit = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Birthdate"
-                        name="birthdate"
+                        label="Birthday"
+                        name="birthday"
                         rules={[{ required: true, message: "Please fill user's birth date." }]}
                     >
                         <DatePicker />

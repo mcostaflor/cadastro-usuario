@@ -30,9 +30,10 @@ const columns = [
         key: 'name',
     },
     {
-        title: 'Birthdate',
-        dataIndex: 'birthdate',
-        key: 'birthdate',
+        title: 'Birthday',
+        dataIndex: 'birthday',
+        key: 'birthday',
+        render: userData => new Date(userData.birthday).toLocaleDateString(),
     },
     {
         render: userData => <Link to={user.page.replace(":id", userData.code)}>View</Link>,
@@ -131,9 +132,9 @@ export const Users = () => {
                         <div>
                             {paginate(users, currentPage, PAGE_SIZE).map((user, index) => (
                                 <UserCard
-                                    key={user.code + index}
-                                    name={user.name + index}
-                                    birthdate={user.birthdate}
+                                    key={user.code}
+                                    name={user.name}
+                                    birthday={new Date(user.birthday).toLocaleDateString()}
                                     code={user.code}
                                     onClick={() => handleUserClicked(user.code)}
                                 />

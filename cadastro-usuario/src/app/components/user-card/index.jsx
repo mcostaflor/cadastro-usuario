@@ -5,7 +5,7 @@ const { Text } = Typography;
 
 const noop = () => { };
 
-export const UserCard = ({ name, birthdate, code, onClick }) => {
+export const UserCard = ({ name, birthday, code, onClick }) => {
     return (
         <Card
             hoverable
@@ -36,14 +36,14 @@ export const UserCard = ({ name, birthdate, code, onClick }) => {
                         </Space>
                     </Col>
                 }
-                {birthdate &&
+                {birthday &&
                     <Col xs={24}>
                         <Space size={4}>
                             <Text strong>
-                                Birthdate:
+                                Birthday:
                             </Text>
                             <Text>
-                                {birthdate}
+                                {birthday}
                             </Text>
                         </Space>
                     </Col>

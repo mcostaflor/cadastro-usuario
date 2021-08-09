@@ -6,29 +6,31 @@ import './index.scss';
 import { Link, useHistory } from 'react-router-dom';
 import { userApi } from '../../../../api';
 import { user } from '../../../../routes';
+import { getBase64 } from '../../../../helpers/getBase64';
 
 const { Title } = Typography;
 
 export const UserCreate = () => {
-    const [photo, setPhoto] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const history = useHistory();
 
-    const handleFormSubmit = (values) => {
+    const handleFormSubmit = async (values) => {
         async function saveUser() {
             const payload = {
                 code: values.code,
                 name: values.name,
-                birthDate: values.birthDate,
-                photo: photo?.file || null,
+                birthday: values.birthday,
+                photo: await getBase64(values.photo?.file) || null,
             };
+
+            console.log(payload);
 
             try {
                 setIsSubmitting(true);
-                const { userId } = await userApi.insert(payload);
+                const { code } = await userApi.insert(payload);
                 message.success("User inserted with success!");
-                history.push(user.page.replace(":id", userId));
+                history.push(user.page.replace(":id", code));
             } catch (e) {
                 message.error("Error inserting user, please try again.");
             } finally {
@@ -40,12 +42,7 @@ export const UserCreate = () => {
     }
 
     const handlePhotoUpload = file => {
-        setPhoto(file);
         return false;
-    };
-
-    const handlePhotoRemoved = () => {
-        setPhoto(null);
     };
 
     return (
@@ -96,8 +93,8 @@ export const UserCreate = () => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    label="Birthdate"
-                    name="birthdate"
+                    label="Birthday"
+                    name="birthday"
                     rules={[{ required: true, message: "Please fill user's birth date." }]}
                 >
                     <DatePicker />
@@ -110,7 +107,6 @@ export const UserCreate = () => {
                         listType="picture"
                         maxCount={1}
                         beforeUpload={handlePhotoUpload}
-                        onRemove={handlePhotoRemoved}
                     >
                         <Button>Upload photo</Button>
                     </Upload>
