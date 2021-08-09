@@ -20,22 +20,20 @@ module.exports = {
         }); 
     },
     update: async (code, data) => {
-        await User.update({
-            code: data.code,
-            name: data.name,
-            birthday: data.birthday,
-            photo: data.photo,
-        },{
+
+        const user = await User.findOne({
             where: {
                 code: code,
             },
         });
+        
+        user.update({
+            name: data.name,
+            birthday: data.birthday,
+            photo: data.photo,
+        });
 
-        const user = await User.findOne({
-            where: {
-                code: data.code,
-            },
-        })
+        user.save();
 
         return user;
     },
