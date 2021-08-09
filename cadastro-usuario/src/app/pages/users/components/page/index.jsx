@@ -12,7 +12,7 @@ export const UserPage = ({ match }) => {
     const [userData, setUserData] = useState(null);
     const [isLoadingUser, setIsLoadingUser] = useState(false);
 
-    const { id } = useParams();
+    const { code } = useParams();
 
     const history = useHistory();
 
@@ -20,7 +20,7 @@ export const UserPage = ({ match }) => {
         async function getUser() {
             try {
                 setIsLoadingUser(true);
-                const user = await userApi.get(id);
+                const user = await userApi.get(code);
                 setUserData(user);
             } catch (e) {
                 message.error("Failed to fetch user, please try again.");
@@ -31,7 +31,7 @@ export const UserPage = ({ match }) => {
         };
 
         getUser();
-    }, [id, history]);
+    }, [code, history]);
 
     return (
         <>
@@ -44,7 +44,7 @@ export const UserPage = ({ match }) => {
                         <Link to="/users">
                             <Button type="secondary" shape="circle" size="large" icon={<ArrowLeftOutlined />} />
                         </Link>
-                        <Link to={`/users/${id}/edit`}>
+                        <Link to={`/users/${code}/edit`}>
                             <Button type="secondary" shape="circle" size="large" icon={<EditOutlined />} loading={isLoadingUser} disabled={isLoadingUser} />
                         </Link>
                     </Space>

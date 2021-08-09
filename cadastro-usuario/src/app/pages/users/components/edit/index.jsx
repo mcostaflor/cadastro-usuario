@@ -9,11 +9,12 @@ import { user } from '../../../../routes';
 import './index.scss';
 import { userApi } from '../../../../api';
 import { getBase64 } from '../../../../helpers/getBase64';
+import { base64ToFile } from '../../../../helpers/base64ToFile';
 
 const { Title } = Typography;
 
 export const UserEdit = () => {
-    const { id } = useParams();
+    const { code } = useParams();
 
     const history = useHistory();
 
@@ -25,11 +26,14 @@ export const UserEdit = () => {
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState();
     const [isDeleting, setIsDeleting] = useState();
 
+    const [userPhoto, setUserPhoto] = useState(null);
+    const [userPhotoUrl, setUserPhotoUrl] = useState(null);
+
     useEffect(() => {
         async function getUser() {
             try {
                 setIsLoadingUser(true);
-                const user = await userApi.get(id);
+                const user = await userApi.get(code);
                 setUserData(user);
             } catch (e) {
                 message.error("Failed to fetch user, please try again.");
@@ -39,24 +43,33 @@ export const UserEdit = () => {
         };
 
         getUser();
-    }, [id, history]);
+    }, [code, history]);
+
+    useEffect(() => {
+        setUserPhoto(userData?.photo ? base64ToFile(userData?.photo, "photo.png") : null);
+    }, [userData]);
+
+    useEffect(() => {
+        async function setPhotoUrl() {
+            setUserPhotoUrl(userPhoto ? await getBase64(userPhoto) : null);
+        };
+
+        setPhotoUrl();
+    }, [userPhoto]);
 
     const handleSubmitButtonClicked = (values) => {
         async function saveUser() {
             const payload = {
-                code: values.code,
                 name: values.name,
                 birthday: values.birthday,
-                photo: await getBase64(values.photo?.file) || null,
+                photo: userPhoto ? await getBase64(userPhoto) : null,
             };
-
-            console.log(payload);
 
             try {
                 setIsSubmitting(true);
-                const { code } = await userApi.update(id, payload);
+                const { code: userCode } = await userApi.update(code, payload);
                 message.success("User saved with success!");
-                history.push(user.page.replace(":id", code));
+                history.push(user.page.replace(":code", userCode));
             } catch (e) {
                 message.error("Error saving user, please try again.");
             } finally {
@@ -71,7 +84,7 @@ export const UserEdit = () => {
         async function deleteUser() {
             try {
                 setIsDeleting(true);
-                await userApi.delete(id);
+                await userApi.delete(code);
                 message.success("User was deleted with success!");
                 history.push(user.list);
             } catch (e) {
@@ -84,6 +97,16 @@ export const UserEdit = () => {
         deleteUser();
     }
 
+    const handleBeforeUpload = file => {
+        if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+            message.error(`${file.name} is not a png or jpeg file`);
+        }
+
+        setUserPhoto(file);
+
+        return file.type === 'image/png' || file.type === 'image/jpeg' ? false : Upload.LIST_IGNORE;
+    };
+
     return (
         <div>
             <div className={'user-edit__header'}>
@@ -92,16 +115,16 @@ export const UserEdit = () => {
                 </Title>
                 <div className={'user-edit__header__actions'}>
                     <Space size="small">
-                        <Link to={user.page.replace(":id", id)}>
+                        <Link to={user.page.replace(":code", code)}>
                             <Button type="secondary" shape="circle" size="large" icon={<ArrowLeftOutlined />} />
                         </Link>
-                        <Button 
-                            type="secondary" 
-                            danger 
-                            shape="circle" 
-                            size="large" 
-                            icon={<DeleteOutlined />} 
-                            onClick={() => setIsDeleteModalVisible(true)} 
+                        <Button
+                            type="secondary"
+                            danger
+                            shape="circle"
+                            size="large"
+                            icon={<DeleteOutlined />}
+                            onClick={() => setIsDeleteModalVisible(true)}
                             loading={isLoadingUser || isSubmitting}
                             disabled={isLoadingUser || isSubmitting}
                         />
@@ -129,43 +152,36 @@ export const UserEdit = () => {
                     wrapperCol={{ span: 14 }}
                     onFinish={handleSubmitButtonClicked}
                     initialValues={{
-                        code: userData?.code,
                         name: userData?.name,
                         birthday: moment(userData?.birthday),
-                        photo: userData?.photo,
                     }}
                 >
                     <Form.Item
-                        label="Code"
-                        name="code"
-                        rules={[{ required: true, message: "Please fill user's code." }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Name"
+                        label="Name:"
                         name="name"
                         rules={[{ required: true, message: "Please user's name." }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Birthday"
+                        label="Birthday:"
                         name="birthday"
                         rules={[{ required: true, message: "Please fill user's birth date." }]}
                     >
                         <DatePicker />
                     </Form.Item>
                     <Form.Item
-                        label="Photo"
+                        label="Photo:"
                         name="photo"
                     >
                         <Upload
-                            listType="picture"
+                            listType="picture-card"
                             maxCount={1}
-                            beforeUpload={() => false}
+                            beforeUpload={handleBeforeUpload}
+                            showUploadList={false}
+                            defaultFileList={userPhoto ? [userPhoto] : []}
                         >
-                            <Button>Upload photo</Button>
+                            {userPhoto ? <img src={userPhotoUrl} alt="user" style={{ width: '100%', height: '100%' }} /> : <Button>Upload photo</Button>}
                         </Upload>
                     </Form.Item>
                 </Form>

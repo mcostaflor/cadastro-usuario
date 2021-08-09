@@ -21,10 +21,10 @@ export const UsersPage = () => {
                     <Route exact path={`${path}/new`}>
                         <UserCreate />
                     </Route>
-                    <Route exact path={`${path}/:id`}>
+                    <Route exact path={`${path}/:code`}>
                         <UserPage />
                     </Route>
-                    <Route exact path={`${path}/:id/edit`}>
+                    <Route exact path={`${path}/:code/edit`}>
                         <UserEdit />
                     </Route>
                     <Redirect to={`${path}`} />
