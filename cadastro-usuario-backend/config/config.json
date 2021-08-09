@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "xmwcvzef",
+    "password": "N8q8_tmoFvS2Q-aI344YeZsVoZoj-AB-",
+    "database": "xmwcvzef",
+    "host": "chunee.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "xmwcvzef",
+    "password": "N8q8_tmoFvS2Q-aI344YeZsVoZoj-AB-",
+    "database": "xmwcvzef",
+    "host": "chunee.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "xmwcvzef",
+    "password": "N8q8_tmoFvS2Q-aI344YeZsVoZoj-AB-",
+    "database": "xmwcvzef",
+    "host": "chunee.db.elephantsql.com",
+    "dialect": "postgres"
+  }
+}
