@@ -7,14 +7,20 @@ export const Navbar = () => {
 
     return (
         <Menu mode="horizontal" theme="dark">
-            <Menu.Item onClick={() => {
-                history.push('/');
-            }}>
+            <Menu.Item
+                key="home"
+                onClick={() => {
+                    history.push('/');
+                }}
+            >
                 Home
             </Menu.Item>
-            <Menu.Item onClick={() => {
-                history.push('/users');
-            }}>
+            <Menu.Item
+                key="users"
+                onClick={() => {
+                    history.push('/users');
+                }}
+            >
                 Users
             </Menu.Item>
         </Menu>
