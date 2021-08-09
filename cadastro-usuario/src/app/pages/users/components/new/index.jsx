@@ -17,20 +17,19 @@ export const UserCreate = () => {
 
     const handleFormSubmit = async (values) => {
         async function saveUser() {
+
             const payload = {
                 code: values.code,
                 name: values.name,
                 birthday: values.birthday,
-                photo: await getBase64(values.photo?.file) || null,
+                photo: values.photo?.fileList[0] ? await getBase64(values.photo?.fileList[0]?.originFileObj) : null,
             };
-
-            console.log(payload);
 
             try {
                 setIsSubmitting(true);
                 const { code } = await userApi.insert(payload);
                 message.success("User inserted with success!");
-                history.push(user.page.replace(":id", code));
+                history.push(user.page.replace(":code", code));
             } catch (e) {
                 message.error("Error inserting user, please try again.");
             } finally {
@@ -104,7 +103,7 @@ export const UserCreate = () => {
                     name="photo"
                 >
                     <Upload
-                        listType="picture"
+                        listType="picture-card"
                         maxCount={1}
                         beforeUpload={handlePhotoUpload}
                     >
