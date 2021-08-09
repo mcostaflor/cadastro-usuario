@@ -2,8 +2,9 @@ import React from 'react';
 import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { PageLayout } from '../../components/page-layout';
 import { UserEdit } from './components/edit';
-import { UserList } from './components/list';
+import { Users } from './components/list';
 import { UserCreate } from './components/new';
+import { UserPage } from './components/page';
 
 import './index.scss';
 
@@ -15,12 +16,15 @@ export const UsersPage = () => {
             <div className={'users-page__content'}>
                 <Switch>
                     <Route exact path={`${path}`}>
-                        <UserList />
+                        <Users />
                     </Route>
                     <Route exact path={`${path}/new`}>
                         <UserCreate />
                     </Route>
-                    <Route exact path={`${path}/edit`}>
+                    <Route exact path={`${path}/:id`}>
+                        <UserPage />
+                    </Route>
+                    <Route exact path={`${path}/:id/edit`}>
                         <UserEdit />
                     </Route>
                     <Redirect to={`${path}`} />
