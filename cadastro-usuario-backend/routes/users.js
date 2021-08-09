@@ -12,7 +12,6 @@ router.get('/:code', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const { code, name, birthday, photo } = req.body;
-  console.log(req.body);
   res.send(await userController.create(code, name, birthday, photo));
 });
 
