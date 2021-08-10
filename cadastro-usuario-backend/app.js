@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
+const config = require('./app.config.json');
+
 app.use(
   express.urlencoded({
     extended: true,
@@ -10,13 +12,11 @@ app.use(
 );
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }))
-
-const port = 3005;
+app.use(express.json({ limit: '50mb' }));
 
 const users = require('./routes/users');
 app.use('/users', users);
 
-app.listen(port, () => {
-  console.log(`App listening at http://127.0.0.1:${port}`)
+app.listen(config.port, config.host, () => {
+  console.log(`App listening at http://${config.host}:${config.port}`)
 });
